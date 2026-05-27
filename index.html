@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEURALIS // Cybernetic Quantum Mainframe</title>
+    <meta name="description" content="Access the secure Neuralis quantum console. Interactive neural core visualization, real-time diagnostic systems, and cybernetic telemetry.">
+    <!-- Google Fonts: Orbitron (Headers), Space Grotesk (Body) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Space+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="cyber-theme">
+    <!-- Custom Reticle Cursor -->
+    <div class="custom-cursor" id="customCursor"></div>
+    <div class="custom-cursor-dot" id="customCursorDot"></div>
+
+    <!-- Scanline CRT Effect Overlay & Flickering Overlay -->
+    <div class="crt-overlay"></div>
+    <div class="vignette"></div>
+    <div class="brownout-flicker" id="brownoutOverlay"></div>
+
+    <!-- Ambient Grid Canvas Background -->
+    <canvas id="ambientCanvas" class="background-canvas"></canvas>
+
+    <!-- Main Container -->
+    <div class="hud-container">
+        
+        <!-- HEADER -->
+        <header class="hud-header glass-panel tilt-card">
+            <!-- Animated Tech Borders -->
+            <div class="tech-border-top"></div>
+            <div class="tech-corner tl"></div>
+            <div class="tech-corner tr"></div>
+            <div class="tech-corner bl"></div>
+            <div class="tech-corner br"></div>
+
+            <div class="header-logo-section">
+                <div class="cyber-glitch-container">
+                    <h1 class="cyber-title glitch-effect" data-text="NEURALIS">NEURALIS</h1>
+                </div>
+                <span class="sub-hash">SYS.VER_998.COGNITIVE</span>
+            </div>
+            
+            <!-- Real-time HUD stats -->
+            <div class="header-telemetry">
+                <div class="telemetry-item">
+                    <span class="label">SECURE_LINK:</span>
+                    <span class="val pulse-text green-glow">ONLINE</span>
+                </div>
+                <div class="telemetry-item">
+                    <span class="label">SYS_LOAD:</span>
+                    <span class="val" id="sysLoadVal">14.02%</span>
+                </div>
+                <div class="telemetry-item">
+                    <span class="label">CHRONO:</span>
+                    <span class="val" id="chronoClock">00:00:00.000</span>
+                </div>
+            </div>
+
+            <!-- Header Controls -->
+            <div class="header-controls">
+                <button class="hud-btn sound-btn" id="soundToggle" aria-label="Toggle Cybernetic Audio">
+                    <span class="icon">🔊</span> AUDIO: <span id="soundStatus">OFF</span>
+                </button>
+                <button class="hud-btn alert-btn" id="emergencyReboot" aria-label="Trigger Core Emergency Reboot">
+                    REBOOT_CORE
+                </button>
+            </div>
+        </header>
+
+        <!-- MAIN LAYOUT -->
+        <main class="hud-grid">
+            
+            <!-- LEFT PANEL: SYSTEM TELEMETRY (UPGRADED TO INTERACTIVE TUNING PANEL) -->
+            <section class="hud-panel left-panel glass-panel tilt-card" id="telemetryPanel">
+                <!-- Laser Border Lines -->
+                <div class="laser-border-line"></div>
+                <div class="tech-corner tl"></div>
+                <div class="tech-corner tr"></div>
+                <div class="tech-corner bl"></div>
+                <div class="tech-corner br"></div>
+
+                <div class="panel-header">
+                    <span class="panel-decor"></span>
+                    <h2>MAINFRAME TUNING</h2>
+                    <span class="system-code">ID: 0x48A7</span>
+                </div>
+                <div class="panel-body">
+                    <!-- Hazard Warning Line -->
+                    <div class="hazard-stripe"></div>
+
+                    <!-- Interactive Slider 1 -->
+                    <div class="slider-group">
+                        <div class="slider-info">
+                            <span class="slider-label">SYNAPSE VELOCITY</span>
+                            <span class="slider-val" id="syncSpeedVal">1.0x</span>
+                        </div>
+                        <input type="range" id="syncSpeedSlider" min="0.1" max="4.0" step="0.1" value="1.0" class="hud-slider">
+                        <span class="slider-desc">Tuning electrical impulse propagation delay</span>
+                    </div>
+
+                    <!-- Interactive Slider 2 -->
+                    <div class="slider-group">
+                        <div class="slider-info">
+                            <span class="slider-label">LINKING CAPACITY</span>
+                            <span class="slider-val" id="linkDistanceVal">140px</span>
+                        </div>
+                        <input type="range" id="linkDistanceSlider" min="50" max="300" step="10" value="140" class="hud-slider">
+                        <span class="slider-desc">Tuning maximum synapse connectivity radius</span>
+                    </div>
+
+                    <!-- Interactive Slider 3 -->
+                    <div class="slider-group">
+                        <div class="slider-info">
+                            <span class="slider-label">SYNTH TELEMETRY FREQ</span>
+                            <span class="slider-val" id="synthPitchVal">220Hz</span>
+                        </div>
+                        <input type="range" id="synthPitchSlider" min="110" max="880" step="10" value="220" class="hud-slider">
+                        <span class="slider-desc">Modulating quantum engine diagnostic oscillator</span>
+                    </div>
+
+                    <!-- Active Feeds Grid -->
+                    <div class="telemetry-grid">
+                        <div class="telemetry-box">
+                            <span class="box-label">NODE COUNT</span>
+                            <span class="box-value" id="nodeCount">0</span>
+                        </div>
+                        <div class="telemetry-box">
+                            <span class="box-label">SPARK MATRIX</span>
+                            <span class="box-value" id="sparkCount">0</span>
+                        </div>
+                        <div class="telemetry-box">
+                            <span class="box-label">INTEGRITY</span>
+                            <span class="box-value green-glow" id="integrityVal">100.0%</span>
+                        </div>
+                        <div class="telemetry-box">
+                            <span class="box-label">ENERGY FACTOR</span>
+                            <span class="box-value" id="energyFactor">1.00</span>
+                        </div>
+                    </div>
+
+                    <!-- Dynamic Scrolling Matrix Log -->
+                    <div class="cyber-scroller-container">
+                        <div class="scroller-header">LIVE DIAGNOSTIC DATA FEEDS</div>
+                        <div class="cyber-scroller" id="diagnosticScroller">
+                            <!-- Populated dynamically via JS -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- MIDDLE PANEL: NEURAL CORE SANDBOX (UPGRADED CORE HUBS) -->
+            <section class="hud-panel center-panel glass-panel tilt-card" id="corePanel">
+                <!-- Laser Border Lines -->
+                <div class="laser-border-line"></div>
+                <div class="tech-corner tl"></div>
+                <div class="tech-corner tr"></div>
+                <div class="tech-corner bl"></div>
+                <div class="tech-corner br"></div>
+
+                <div class="panel-header">
+                    <span class="panel-decor"></span>
+                    <h2>NEURAL CORE VISUALIZER</h2>
+                    <span class="system-code">STATUS: SYNCHRONIZED</span>
+                </div>
+                <div class="panel-body canvas-container">
+                    <div class="canvas-instructions">
+                        <p class="blink-text">CLICK TO SEED CORES & ROTATE ANCHORS</p>
+                    </div>
+                    <canvas id="neuralCanvas"></canvas>
+                    
+                    <!-- Advanced HUD graphics inside canvas overlay -->
+                    <div class="hud-frame-overlay">
+                        <div class="reticle-box"></div>
+                        <div class="grid-crosshairs"></div>
+                    </div>
+
+                    <div class="neural-legend">
+                        <span class="legend-item"><span class="dot anchor-dot"></span> Core Hub</span>
+                        <span class="legend-item"><span class="dot cyan-dot"></span> Input Node</span>
+                        <span class="legend-item"><span class="dot magenta-dot"></span> Synapse</span>
+                        <span class="legend-item"><span class="dot spark-dot"></span> Spark Flux</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- RIGHT PANEL: CLI TERMINAL -->
+            <section class="hud-panel right-panel glass-panel tilt-card" id="terminalPanel">
+                <!-- Laser Border Lines -->
+                <div class="laser-border-line"></div>
+                <div class="tech-corner tl"></div>
+                <div class="tech-corner tr"></div>
+                <div class="tech-corner bl"></div>
+                <div class="tech-corner br"></div>
+
+                <div class="panel-header">
+                    <span class="panel-decor"></span>
+                    <h2>CYBERNETIC CLI SHELL</h2>
+                    <span class="system-code">PORT: 11434</span>
+                </div>
+                <div class="panel-body terminal-body">
+                    <!-- Tech Warning Bar -->
+                    <div class="tech-badge">OLLAMA-INTEGRITY SHELL // SECURE_CHANNEL</div>
+                    <div class="terminal-header-text">
+                        NEURALIS SHELL v3.0 (SUPER-CHARGED)
+                        Type <span class="cyan-text font-bold">help</span> to list active terminal protocols.
+                    </div>
+                    <div class="terminal-logs" id="terminalLogs">
+                        <!-- Populated dynamically -->
+                        <div class="log-line">Initializing local LLM interface...</div>
+                        <div class="log-line success-line">@local endpoint configuration locked: http://localhost:11434/v1</div>
+                        <div class="log-line warning-line">Ready for incoming neural queries.</div>
+                    </div>
+                    <div class="terminal-input-row">
+                        <span class="terminal-prompt">></span>
+                        <input type="text" id="terminalInput" placeholder="Enter diagnostic query..." autocomplete="off" autofocus>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- FOOTER -->
+        <footer class="hud-footer glass-panel tilt-card">
+            <div class="tech-corner tl"></div>
+            <div class="tech-corner tr"></div>
+            <div class="tech-corner bl"></div>
+            <div class="tech-corner br"></div>
+
+            <div class="footer-left">
+                <span>// CONNECT AI LAB RESEARCH ALLIANCE</span>
+            </div>
+            <div class="footer-center">
+                <span class="scan-freq">SCAN_FREQ: <span id="scanFreq">2.44 GHz</span></span>
+            </div>
+            <div class="footer-right">
+                <span class="security-hash">SHA-256: 8f9b9a11...77d85ea1</span>
+            </div>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
